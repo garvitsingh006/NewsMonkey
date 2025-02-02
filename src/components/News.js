@@ -14,28 +14,29 @@ const News = (props) => {
     const updateNews = async () => {
         let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`
         setLoading(true)
-        props.changeProgress(10)
+        props.setProgress(10)
         let data  = await fetch(url)
-        props.changeProgress(30)
+        props.setProgress(30)
         let parsedData = await data.json()
-        props.changeProgress(50)
+        props.setProgress(50)
         console.log(parsedData)
         if (Array.isArray(parsedData.articles)) {
             setArticles(parsedData.articles)
             setTotalResults(parsedData.totalResults)
             setLoading(false)
-            props.changeProgress(100)
+            props.setProgress(100)
 
         } else {
             setArticles([])
             setTotalResults(0)
             setLoading(false)
-            props.changeProgress(100)
+            props.setProgress(100)
         }
     }
 
     useEffect(() => {
         updateNews()
+        //eslint-disable-next-line
     }, [])
 
     const fetchMoreData = async () => {
@@ -50,13 +51,13 @@ const News = (props) => {
             setArticles(articles.concat(parsedData.articles))
             setTotalResults(parsedData.totalResults)
             setLoading(false)
-            props.changeProgress(100)
+            props.setProgress(100)
 
         } else {
             setArticles([])
             setTotalResults(0)
             setLoading(false)
-            props.changeProgress(100)
+            props.setProgress(100)
         }
     }
 
@@ -66,7 +67,7 @@ const News = (props) => {
 
         return (
             <>
-                <h1 className="text-center" style={{margin: '30px 0px'}}>NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
+                <h1 className="text-center" style={{margin: '30px 0px', marginTop: '90px'}}>NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
                 {loading && articles.length === 0 && <Spinner />}
                 <InfiniteScroll
                     dataLength={articles.length}
